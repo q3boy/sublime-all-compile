@@ -12,12 +12,18 @@
         "exec_stdio" : ["/usr/bin/env", "coffee", "-s"],
         "cmpl_stdio" : ["/usr/bin/env", "coffee", "-pbs"],
       },
-      "region" : "stdio",
+      "region" : "stdio"
     },
     "Python" : {
-      "extname": ["py"],
-      "source": ["source.python"],
-      "syntax" : "Packages/Python/Python.tmLanguage",
+      "extname" : ["py"],
+      "source" : ["source.python"],
+      "syntax" : "Packages/JavaScript/JavaScript.tmLanguage",
+      "cmd" : {
+        "exec_file" : ["/usr/bin/env", "coffee", "$file"],
+        "cmpl_file" : ["/usr/bin/env", "coffee", "-pb", "$file"],
+        "exec_stdio" : ["/usr/bin/env", "coffee", "-s"],
+        "cmpl_stdio" : ["/usr/bin/env", "coffee", "-pbs"],
+      },
       "region" : "stdio"
     }
     // "Jade" : {

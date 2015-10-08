@@ -1,5 +1,5 @@
 import os
-from .util import log, getenv
+from .util import getenv
 
 class ACError(Exception):
     def __init__(self, code, msg="", path=None):

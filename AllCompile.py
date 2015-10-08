@@ -1,17 +1,25 @@
 import sublime, sublime_plugin
-import sys
 
-from .lib.exec import Process
 
-from .lib.settings import Settings
+from .lib.compile import Compile
+
+
+class AllCompileCommand(sublime_plugin.TextCommand):
+    def run(self, edit, execute=False):
+        # print(run)
+        Compile(self.view).compile(execute)
+
+# from .lib.exec import Process
+
+# from .lib.settings import Settings
 
 # print(Process)
 # import os
 # import subprocess
-from threading import Thread
+# from threading import Thread
 
 
-settings = Settings()
+# settings = Settings()
 # from time import sleep
 
 # def exec(message=''):
@@ -91,11 +99,11 @@ settings = Settings()
 
 
 
-class AllCompileCommand(sublime_plugin.TextCommand):
-    def run(self, edit):
+
+        # print(123)
         # region = self.view.sel()[0]
         # print(self.view.settings().get('syntax'))
-        print(settings.get(self.view))
+        # print(settings.get(self.view))
         # panel = CompilePanel(self.view)
         # panel.compile()
 

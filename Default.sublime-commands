@@ -4,8 +4,8 @@
       "command": "all_compile"
     },
     {
-      "caption": "AllCompile Run",
+      "caption": "AllCompile Execute",
       "command": "all_compile",
-      "args": { "run": true }
+      "args": { "execute": true}
     }
 ]

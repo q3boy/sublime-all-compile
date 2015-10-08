@@ -1,16 +1,41 @@
-from .panel import SublimeTextEditorView, SublimeTextOutputPanel
+from .panel import Editor, OutputPanel
 from .execute import Process
 from .settings import Settings
+from threading import Thread
 
-class Compile:
+class Compile(object):
     PANEL_NAME = 'allcompile_output'
     def __init__(self, view):
         self.view = view
         self.window = view.window()
-        self.editor = SublimeTextEditorView(view)
-        self.codes = self.editor.get_text()
-        self.codes = self.editor.get_text()
 
+        editor = Editor(view)
+        self.codes = editor.get_text()
+        self.region = editor.has_selected_text()
+        self.panel = None
+
+    def create_panel(self):
+        self.panel = OutputPanel(self.window, self.PANEL_NAME)
+
+    def show(self, syntax, codes):
+        self.create_panel()
+        self.panel.set_syntax_file(syntax)
+        self.panel.display(codes)
+
+    def error(self, error):
+        self.show('Packages/Markdown/Markdown.tmLanguage', str(error))
+
+    def compile(self, execute=False):
+        syntax, cmd, stdio, tmpfile = Settings().get(self.view, execute, self.region)
+        def func():
+            p = Process(working_dir="/Users/q3boy/codes")
+            p.run(['./a'])
+            stdout = p.communicate('text', lambda txt: print("=========\n", txt))
+            print("end stdout", stdout)
+        Thread(target=func).start()
+
+        # print(syntax, cmd, stdio, tmpfile)
+        return syntax, cmd, stdio, tmpfile
 
 # def pp():
 #     p = Process(working_dir="/Users/q3boy/codes")

@@ -4,8 +4,9 @@ import re
 
 from threading import Thread
 from contextlib import contextmanager
+from .util import log
 
-class Dir():
+class Dir(object):
     @classmethod
     @contextmanager
     def cd(cls, newdir):
@@ -27,17 +28,17 @@ class ThreadWithResult(Thread):
     def run(self):
         self.result = self.target(*self.args)
 
-class ProcessCache():
+class ProcessCache(object):
     _procs = []
 
     @classmethod
     def add(cls, process):
-        print("add to cache")
+        log("add to cache")
         cls._procs.append(process)
 
     @classmethod
     def remove(cls, process):
-        print("remove from cache")
+        log("remove from cache")
         if process in cls._procs:
             cls._procs.remove(process)
 
@@ -60,7 +61,7 @@ class ProcessCache():
         del cls._procs[:]
 
 
-class Process():
+class Process(object):
     def __init__(self, path=None, working_dir=None, nonblocking=True):
         self.working_dir = working_dir
         self.nonblocking = nonblocking
@@ -68,13 +69,16 @@ class Process():
         self.last_command = ""
         self.failed = False
         self.env = os.environ.copy()
+        self.process = None
         if path:
             self.env['PATH'] = path
 
 
     def run(self, command):
         with Dir.cd(self.working_dir):
-            self.process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=self.env, shell=True, preexec_fn=os.setsid)
+            self.process = subprocess.Popen(
+                command, stdout=subprocess.PIPE,stderr=subprocess.PIPE,
+                env=self.env, shell=True, preexec_fn=os.setsid)
 
         self.last_command = command
         print("++++ add", self.last_command, ' to cache')
@@ -84,41 +88,44 @@ class Process():
     def run_sync(self, command):
 
         with Dir.cd(self.working_dir):
-            self.process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=self.env, shell=True)
+            self.process = subprocess.Popen(
+                command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                env=self.env, shell=True)
             (stdout, stderr) = self.process.communicate()
             self.failed = self.process.returncode == 127 or stderr
 
         return (stdout.decode('utf-8'), stderr.decode('utf-8'))
 
 
-    def communicate(self, input=None, fn = lambda x:None):
-        stdout, stderr = self.pipe(fn)
-        self.process.communicate(input)
+    def communicate(self, inputs=None, func = lambda x:None):
+        stdout, stderr = self.pipe(func)
+        self.process.communicate(inputs)
         self.terminate()
         return (stdout, stderr)
 
-    def pipe(self, fn):
+    def pipe(self, func):
         streams = [self.process.stdout, self.process.stderr]
         streams_text = []
         if self.nonblocking:
-            threads = [ThreadWithResult(target=self._pipe_stream, args=(stream, fn)) for stream in streams]
+            threads = [ThreadWithResult(target=self._pipe_stream, args=(stream, func)) for stream in streams]
             [t.join() for t in threads]
             streams_text = [t.result for t in threads]
         else:
-            streams_text = [self._pipe_stream(stream, fn) for stream in streams]
+            streams_text = [self._pipe_stream(stream, func) for stream in streams]
         return streams_text
 
-    def _pipe_stream(self, stream, fn):
+    def _pipe_stream(self, stream, func):
         output_text = ""
         while True:
             line = stream.readline()
-            if not line: break
+            if not line:
+                break
             line = line.rstrip()
             output_line = line.decode('utf-8')
             output_line = re.sub(r'\033\[(\d{1,2}m|\d\w)', '', str(output_line))
             output_line += "\n"
             output_text += output_line
-            fn(output_line)
+            func(output_line)
         return output_text
 
     def terminate(self):
