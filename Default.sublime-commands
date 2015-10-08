@@ -1,0 +1,11 @@
+[
+    {
+      "caption": "AllCompile Compile",
+      "command": "all_compile"
+    },
+    {
+      "caption": "AllCompile Run",
+      "command": "all_compile",
+      "args": { "run": true }
+    }
+]

@@ -1,0 +1,14 @@
+{
+	"automatic_order": true,
+	"iterations": 1,
+	"mods_load_order":
+	[
+		"lib/util.py",
+		"lib/settings.py",
+		"lib/panel.py",
+		"lib/execute.py",
+		"lib/error.py",
+		"lib/compile.py",
+		"AllCompile.py"
+	]
+}

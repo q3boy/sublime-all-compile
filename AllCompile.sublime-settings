@@ -1,0 +1,36 @@
+{
+  "path" : [],
+  "syntax" : "Packages/Text/Plain text.tmLanguage",
+  "compilers" : {
+    "CoffeeScript": {
+      "extname" : ["coffee"],
+      "source" : ["source.coffee"],
+      "syntax" : "Packages/JavaScript/JavaScript.tmLanguage",
+      "cmd" : {
+        "exec_file" : ["/usr/bin/env", "coffee", "$file"],
+        "cmpl_file" : ["/usr/bin/env", "coffee", "-pb", "$file"],
+        "exec_stdio" : ["/usr/bin/env", "coffee", "-s"],
+        "cmpl_stdio" : ["/usr/bin/env", "coffee", "-pbs"],
+      },
+      "region" : "stdio",
+    },
+    "Python" : {
+      "extname": ["py"],
+      "source": ["source.python"],
+      "syntax" : "Packages/Python/Python.tmLanguage",
+      "region" : "stdio"
+    }
+    // "Jade" : {
+
+    // },
+    // "Stylus" : {
+
+    // },
+    // "JavaScript" : {
+
+    // },
+    // "Yaml" : {
+
+    // }
+  }
+}
