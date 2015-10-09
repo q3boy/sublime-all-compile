@@ -1,6 +1,6 @@
 import sublime
 from .error import ACTypeNotFound
-from .util import log
+from .util import log, getpath
 def src_type(view):
     region = view.sel()[0]
     return view.scope_name(region.begin()).split(' ', maxsplit=1)[0]
@@ -34,7 +34,7 @@ class  Settings(object):
 
     def get(self, view, execute, region):
         name, settings, src, ext = self.check(view)
-        syntax = self.settings.get('syntax')
+        syntax = settings.get('syntax') or self.settings.get('syntax')
 
         if name == None:
             raise ACTypeNotFound(src, ext)
@@ -43,8 +43,21 @@ class  Settings(object):
         mode = 'exec_' if execute else 'cmpl_'
         mode += 'stdio' if stdio else 'file'
         cmd = settings.get('cmd')[mode]
+        if settings.get('path'):
+            path = getpath(settings.get('path'))
+        else:
+            path = getpath()
+        window = view.window()
+        variables = window.extract_variables()
+        folder = variables.get('folder')
+        file_path = variables.get('file_path')
+        working_dir = folder or file_path
 
-        return syntax, cmd, stdio, tmpfile
+        cmd1 = []
+        for part in cmd:
+            cmd1 += [sublime.expand_variables(part, variables)]
+
+        return syntax, cmd1, stdio, tmpfile, path, working_dir
 
 
 

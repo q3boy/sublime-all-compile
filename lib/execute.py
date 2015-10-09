@@ -33,12 +33,12 @@ class ProcessCache(object):
 
     @classmethod
     def add(cls, process):
-        log("add to cache")
+        log("add to cache", process.last_command)
         cls._procs.append(process)
 
     @classmethod
     def remove(cls, process):
-        log("remove from cache")
+        log("remove from cache", process.last_command)
         if process in cls._procs:
             cls._procs.remove(process)
 
@@ -81,7 +81,6 @@ class Process(object):
                 env=self.env, shell=True, preexec_fn=os.setsid)
 
         self.last_command = command
-        print("++++ add", self.last_command, ' to cache')
         ProcessCache.add(self)
         return self
 
@@ -98,10 +97,10 @@ class Process(object):
 
 
     def communicate(self, inputs=None, func = lambda x:None):
-        stdout, stderr = self.pipe(func)
+        stdout = self.pipe(func)
         self.process.communicate(inputs)
         self.terminate()
-        return (stdout, stderr)
+        return stdout
 
     def pipe(self, func):
         streams = [self.process.stdout, self.process.stderr]
@@ -125,13 +124,13 @@ class Process(object):
             output_line = re.sub(r'\033\[(\d{1,2}m|\d\w)', '', str(output_line))
             output_line += "\n"
             output_text += output_line
+            log('line', output_line)
             func(output_line)
         return output_text
 
     def terminate(self):
         if self.is_alive():
             self.process.terminate()
-        print("---- del", self.last_command, ' from cache')
         ProcessCache.remove(self)
 
     def is_alive(self):
@@ -143,7 +142,6 @@ class Process(object):
     def kill(self):
         pid = self.process.pid
         os.killpg(pid, signal.SIGTERM)
-        print("---- del", self.last_command, ' from cache')
         ProcessCache.remove(self)
 
 

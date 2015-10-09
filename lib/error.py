@@ -1,12 +1,12 @@
 import os
-from .util import getenv
+from .util import getpath
 
 class ACError(Exception):
     def __init__(self, code, msg="", path=None):
         if path != None:
             self.path = path
         else:
-            self.path = getenv()['PATH'].split(os.pathsep)
+            self.path = getpath().split(os.pathsep)
         self.code = code
         self.msg = msg
 

@@ -2,12 +2,44 @@ import sublime, sublime_plugin
 
 
 from .lib.compile import Compile
+from .lib.util import log
+
+
+AC_DICT = {}
+
+def getac(wid, view):
+    ac_inst = AC_DICT.get(wid)
+    if ac_inst:
+        return ac_inst
+    ac_inst = AllCompile(view)
+    AC_DICT[wid] = ac_inst
+    return ac_inst
+
+
+class AllCompile(object):
+    def __init__(self, view):
+        self.view = view
+        self.last_compile = None
+
+    def compile(self, execute=False):
+        # print(run)
+        self.last_compile = Compile(self.view).compile(execute)
+
+
+
+    # def show_panel(self, edit):
+    #     if self.last_compile:
+    #         self.last_compile.
 
 
 class AllCompileCommand(sublime_plugin.TextCommand):
+
     def run(self, edit, execute=False):
-        # print(run)
-        Compile(self.view).compile(execute)
+        wid = self.view.window().id()
+        log('window id', wid)
+        ac_inst = getac(wid, self.view)
+        log('allcompile instance', ac_inst)
+        ac_inst.compile(execute)
 
 # from .lib.exec import Process
 

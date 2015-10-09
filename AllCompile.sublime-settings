@@ -7,10 +7,10 @@
       "source" : ["source.coffee"],
       "syntax" : "Packages/JavaScript/JavaScript.tmLanguage",
       "cmd" : {
-        "exec_file" : ["/usr/bin/env", "coffee", "$file"],
-        "cmpl_file" : ["/usr/bin/env", "coffee", "-pb", "$file"],
-        "exec_stdio" : ["/usr/bin/env", "coffee", "-s"],
-        "cmpl_stdio" : ["/usr/bin/env", "coffee", "-pbs"],
+        "exec_file" : ["coffee", "${file}"],
+        "cmpl_file" : ["coffee", "-pb", "${file}"],
+        "exec_stdio" : ["coffee", "-s"],
+        "cmpl_stdio" : ["coffee", "-pbs"],
       },
       "region" : "stdio"
     },
@@ -19,10 +19,10 @@
       "source" : ["source.python"],
       "syntax" : "Packages/JavaScript/JavaScript.tmLanguage",
       "cmd" : {
-        "exec_file" : ["/usr/bin/env", "coffee", "$file"],
-        "cmpl_file" : ["/usr/bin/env", "coffee", "-pb", "$file"],
-        "exec_stdio" : ["/usr/bin/env", "coffee", "-s"],
-        "cmpl_stdio" : ["/usr/bin/env", "coffee", "-pbs"],
+        "exec_file" : ["coffee", "${file}"],
+        "cmpl_file" : ["coffee", "-pb", "${file}"],
+        "exec_stdio" : ["coffee", "-s"],
+        "cmpl_stdio" : ["coffee", "-pbs"],
       },
       "region" : "stdio"
     }

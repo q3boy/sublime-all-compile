@@ -12,9 +12,16 @@ class OutputPanel(object):
     def show(self):
         self._window.run_command('show_panel', {'panel': 'output.%s' % self.name})
 
-    def write(self, text):
+    def lock(self):
+        self._panel.set_read_only(True)
+
+    def unlock(self):
         self._panel.set_read_only(False)
+
+    def write(self, text):
+        self.unlock()
         self._panel.run_command('append', {'characters': text})
+        self.lock()
 
     def display(self, text):
         self.write(text)
