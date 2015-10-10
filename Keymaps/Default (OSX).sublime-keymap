@@ -1,4 +1,5 @@
 [
     {"keys": ["super+shift+c"], "command": "all_compile"},
-    {"keys": ["super+shift+x"], "command": "all_compile_exec"}
+    {"keys": ["super+shift+x"], "command": "all_compile", "args": { "mode" : "execute"}},
+    {"keys": ["ctrl+shift+x"], "command": "all_compile", "args": { "mode" : "mocha"}},
 ]

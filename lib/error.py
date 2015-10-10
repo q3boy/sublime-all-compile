@@ -33,5 +33,19 @@ class ACTypeNotFound(ACError):
         code = "Type Node Found"
         msg = "source: %s\n" % src
         msg += "extname: %s" % ext
-        super().__init__(code, msg, [])
+        super(ACTypeNotFound, self).__init__(code, msg, [])
+
+class ACCommandModeNotFound(ACError):
+    def __init__(self, type, mode):
+        code = "Command Mode Mode Found"
+        msg = "type: %s\n" % type
+        msg = "mode: %s\n" % mode
+        super(ACCommandModeNotFound, self).__init__(code, msg, [])
+
+
+class ACSettingsError(ACError):
+    def __init__(self, path):
+        code = "Settings Error"
+        msg = "path: %s\n" % type
+        super(ACSettingsError, self).__init__(code, msg, [])
 

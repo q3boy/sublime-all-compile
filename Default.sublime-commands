@@ -1,11 +1,20 @@
 [
     {
-      "caption": "AllCompile Compile",
+      "caption": "AllCompile: Compile",
       "command": "all_compile"
     },
     {
-      "caption": "AllCompile Execute",
+      "caption": "AllCompile: Execute",
       "command": "all_compile",
-      "args": { "execute": true}
+      "args": { "mode" : "execute"}
+    },
+    {
+      "caption": "AllCompile: Show Panel",
+      "command": "all_compile_show_panel"
+    },
+    {
+      "caption": "AllCompile: Kill Running Task",
+      "command": "all_compile_kill"
     }
+
 ]

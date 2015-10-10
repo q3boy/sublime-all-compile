@@ -1,99 +1,72 @@
+import os
 from .panel import Editor, OutputPanel
 from .execute import Process
 from .settings import Settings
-from .util import log
+from .util import log, defer
 from threading import Thread
-from tempfile import TemporaryFile
-
-# class Tempfile(object):
 
 
-class Compile(object):
+class Compile(OutputPanel):
     PANEL_NAME = 'allcompile_output'
+
     def __init__(self, view):
         self.view = view
-        self.window = view.window()
 
-        editor = Editor(view)
-        self.codes = editor.get_text()
-        self.region = editor.has_selected_text()
-        self.panel = None
-        # self.create_panel()
-
-    def create_panel(self):
-        self.panel = OutputPanel(self.window, self.PANEL_NAME)
-
-
-    def show(self, syntax):
-        self.create_panel()
-        self.panel.set_syntax_file(syntax)
-
-    def write(self, codes):
-        self.panel.display(codes)
+        self.editor = Editor(view)
+        self.region = self.editor.has_selected_text()
+        self.tmpfile = None
+        self.last_process = None
+        super(Compile, self).__init__(view.window(), self.PANEL_NAME)
 
     def error(self, error):
-        self.show('Packages/Markdown/Markdown.tmLanguage')
-        self.panel.display(str(error))
+        self.set_syntax_file('Packages/Markdown/Markdown.tmLanguage')
+        self.write(str(error))
+        self.show()
 
-    def compile(self, execute=False):
-        syntax, cmd, stdio, tmpfile, path, working_dir = Settings().get(self.view, execute, self.region)
-        self.show(syntax)
+    def kill(self):
+        self.last_process.kill()
+        if self.tmpfile:
+            try:
+                os.unlink(self.tmpfile.name)
+            except Exception:
+                pass
 
+
+    def compile(self, mode):
+        # get settings
+        syntax, cmd, stdio, path, working_dir, tmpfile, region = \
+            Settings().get(self.view, mode, self.region)
+        codes = self.editor.get_text() if region else self.editor.get_all_text()
+        # show panel
+        self.set_syntax_file(syntax)
+        self.show()
+        codes = codes.encode()
+        self.tmpfile = tmpfile
+        # write tmpfile
+        if tmpfile:
+            log('write tmpfile', tmpfile.name)
+            tmpfile.write(codes)
+            tmpfile.close()
+        # thread for execute
         def func():
-            p = Process(working_dir=working_dir, path=path)
-            p.run(" ".join(cmd))
-            stdout = p.communicate('text', self.write)
-            log("end stdout", stdout)
+            log("new thread", cmd)
+            # run sub process
+            self.last_process = Process(working_dir=working_dir, path=path, mode_name=mode)
+            self.last_process.run(cmd)
+            if stdio:
+                self.last_process.communicate(inputs=codes, func=self.write)
+
+            else:
+                self.last_process.communicate(func=self.write)
+
+            # delete tmpfile
+            if tmpfile:
+                log('delete tmpfile', tmpfile.name)
+                os.unlink(tmpfile.name)
+                self.tmpfile = None
+            # sublime.status_message('[ AllCompile Done ]')
+            log("all done")
+        # start thread
         Thread(target=func).start()
-        # log()
+        return self
 
-        # print(syntax, cmd, stdio, tmpfile)
-        return syntax, cmd, stdio, tmpfile
-
-# def pp():
-#     p = Process(working_dir="/Users/q3boy/codes")
-#     p.run(['./a'])
-#     stdout, stderr = p.communicate('text', lambda txt: print("=========\n", txt))
-#     print("stdout", stdout)
-#     print("stderr", stderr)
-
-# Thread(target = pp).start()
-
-
-
-
-
-# class CompilePanel:
-#     PANEL_NAME = 'allcompile_output'
-
-#     def __init__(self, view):
-#         self.view = view
-#         self.window = view.window()
-#         self.type, self.setting = sets_format(self.view)
-#         self.editor = SublimeTextEditorView(self.view)
-#         self.codes = self.editor.get_text()
-
-#         self.create_panel()
-
-
-
-#     def create_panel(self):
-#         self.panel = SublimeTextOutputPanel(self.window, self.PANEL_NAME)
-
-#     def compile(self) :
-#         if self.type == TYPE_NOT_DEFINED:
-#             self.error("# Type Not Defined")
-#             return
-
-#         # self.write(self.setting['syntax'])
-
-#     def write(self, syntax):
-#         # print(123)
-#         if not syntax:
-#             raise ValueError('missing `syntax` setting')
-#         self.panel.set_syntax_file(syntax)
-#         # self.panel.display(self.codes)
-
-#     def error(self, error):
-#         self.panel.set_syntax_file('Packages/Markdown/Markdown.tmLanguage')
-#         self.panel.display(error)

@@ -7,28 +7,23 @@
       "source" : ["source.coffee"],
       "syntax" : "Packages/JavaScript/JavaScript.tmLanguage",
       "cmd" : {
-        "exec_file" : ["coffee", "${file}"],
-        "cmpl_file" : ["coffee", "-pb", "${file}"],
-        "exec_stdio" : ["coffee", "-s"],
-        "cmpl_stdio" : ["coffee", "-pbs"],
+        "compile" : {
+          "file" : "/usr/bin/env coffee -pb ${file}",
+          "stdio" : "/usr/bin/env coffee -pbs"
+        },
+        "execute" : {
+          "file" : "/usr/bin/env coffee ${file}",
+          "stdio" : "/usr/bin/env coffee -s"
+        },
+        "mocha" : {
+          "file" : "/usr/bin/env mocha --compilers=coffee:coffee-script/register --reporter=dot --growl --no-colors ${file}",
+          "no_region" : true
+        }
       },
-      "region" : "stdio"
     },
-    "Python" : {
-      "extname" : ["py"],
-      "source" : ["source.python"],
-      "syntax" : "Packages/JavaScript/JavaScript.tmLanguage",
-      "cmd" : {
-        "exec_file" : ["coffee", "${file}"],
-        "cmpl_file" : ["coffee", "-pb", "${file}"],
-        "exec_stdio" : ["coffee", "-s"],
-        "cmpl_stdio" : ["coffee", "-pbs"],
-      },
-      "region" : "stdio"
-    }
-    // "Jade" : {
+    "Jade" : {
 
-    // },
+    },
     // "Stylus" : {
 
     // },

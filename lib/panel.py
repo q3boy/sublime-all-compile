@@ -5,12 +5,14 @@ from .util import log
 class OutputPanel(object):
 
     def __init__(self, window, name):
-        self.name = name
+        self.name = "%s.%d" % (name, window.id())
         self._window = window
-        self._panel = self._get_or_create_panel(window, name)
+        log('create panel', self.name)
+        self._panel = self._get_or_create_panel(window, self.name)
 
     def show(self):
-        self._window.run_command('show_panel', {'panel': 'output.%s' % self.name})
+        log('show panel', self.name)
+        self._window.run_command('show_panel', {'panel': "output.%s" % self.name})
 
     def lock(self):
         self._panel.set_read_only(True)
@@ -24,8 +26,8 @@ class OutputPanel(object):
         self.lock()
 
     def display(self, text):
-        self.write(text)
         self.show()
+        self.write(text)
 
     def set_syntax_file(self, syntax_file):
         self._panel.set_syntax_file(syntax_file)
