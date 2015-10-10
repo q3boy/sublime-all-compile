@@ -2,6 +2,7 @@ import sublime, sublime_plugin
 
 
 from .lib.compile import Compile
+from .lib.mode import ModePanel
 from .lib.util import log
 
 
@@ -45,4 +46,12 @@ class AllCompileShowPanelCommand(sublime_plugin.TextCommand):
 
     def run(self, edit):
         getac(self.view).show()
+
+class AllCompileKillCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        getac(self.view).kill()
+
+class AllCompileCommandListCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        ModePanel(self.view).show(lambda mode: getac(self.view).compile(mode))
 

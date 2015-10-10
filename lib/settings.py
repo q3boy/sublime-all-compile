@@ -64,6 +64,19 @@ class  Settings(object):
         log('found nothing', src, ext)
         return None, {}, src, ext
 
+    def getMode(self, view):
+        # get type settings
+        name, settings, src, ext = self.check(view)
+        # check type
+        if name == None:
+            raise ACTypeNotFound(src, ext)
+        # check command
+        cmd = settings.get('cmd')
+        if not cmd:
+            raise ACCommandNotFound(name)
+        return list(cmd)
+
+
     def get(self, view, mode, region):
         # get type settings
         name, settings, src, ext = self.check(view)

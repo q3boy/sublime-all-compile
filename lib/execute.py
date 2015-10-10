@@ -121,7 +121,8 @@ class Process(object):
 
     def kill(self):
         pid = self.process.pid
-        os.killpg(pid, signal.SIGTERM)
+        log('kill', pid)
+        os.kill(pid, signal.SIGTERM)
         ProcessCache.remove(self)
 
 

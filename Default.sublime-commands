@@ -3,6 +3,7 @@
       "caption": "AllCompile: Compile",
       "command": "all_compile"
     },
+
     {
       "caption": "AllCompile: Execute",
       "command": "all_compile",
@@ -15,6 +16,9 @@
     {
       "caption": "AllCompile: Kill Running Task",
       "command": "all_compile_kill"
-    }
-
+    },
+    {
+      "caption": "AllCompile: Commands List",
+      "command": "all_compile_command_list"
+    },
 ]

@@ -6,6 +6,7 @@
 		"lib/util.py",
 		"lib/settings.py",
 		"lib/panel.py",
+		"lib/mode.py",
 		"lib/execute.py",
 		"lib/error.py",
 		"lib/compile.py",
