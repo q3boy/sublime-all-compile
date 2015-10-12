@@ -3,10 +3,7 @@ from .util import getpath
 
 class ACError(Exception):
     def __init__(self, code, msg="", path=None):
-        if path != None:
-            self.path = path
-        else:
-            self.path = getpath().split(os.pathsep)
+        self.path = path or getpath().split(os.pathsep)
         self.code = code
         self.msg = msg
 
@@ -30,28 +27,34 @@ Path
 
 class ACTypeNotFound(ACError):
     def __init__(self, src, ext):
-        code = "Type Not Found"
+        code = "Type not Found"
         msg = "source: %s\n" % src
-        msg += "extname: %s" % ext
-        super(ACTypeNotFound, self).__init__(code, msg, [])
+        msg += "extname: %s\n" % ext
+        super().__init__(code, msg)
 
 class ACCommandNotFound(ACError):
     def __init__(self, type):
-        code = "Command Not Found"
+        code = "Command not Found"
         msg = "type: %s\n" % type
-        super(ACCommandNotFound, self).__init__(code, msg, [])
+        super().__init__(code, msg)
 
 class ACCommandModeNotFound(ACError):
     def __init__(self, type, mode):
-        code = "Command Mode Not Found"
+        code = "Command Mode not Found"
         msg = "type: %s\n" % type
         msg = "mode: %s\n" % mode
-        super(ACCommandModeNotFound, self).__init__(code, msg, [])
+        super().__init__(code, msg)
 
 
 class ACSettingsError(ACError):
     def __init__(self, path):
         code = "Settings Error"
         msg = "path: %s\n" % type
-        super(ACSettingsError, self).__init__(code, msg, [])
+        super().__init__(code, msg)
+
+class ACCommandNotDefined(ACError):
+    def __init__(self):
+        code = "Command not Defined"
+        msg = "both file and stdio command not defined."
+        super().__init__(code, msg)
 

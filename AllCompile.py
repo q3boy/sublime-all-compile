@@ -4,6 +4,7 @@ import sublime, sublime_plugin
 from .lib.compile import Compile
 from .lib.mode import ModePanel
 from .lib.util import log
+from .lib.settings import src_type
 
 
 AC_DICT = {}
@@ -14,18 +15,17 @@ def getac(view):
     ac_inst = AC_DICT.get(wid)
     if ac_inst:
         return ac_inst
-    ac_inst = AllCompile(view)
+    ac_inst = AllCompile()
     AC_DICT[wid] = ac_inst
     return ac_inst
 
 
 class AllCompile(object):
-    def __init__(self, view):
-        self.view = view
+    def __init__(self):
         self.last_compile = None
 
-    def compile(self, mode):
-        self.last_compile = Compile(self.view)
+    def compile(self, view, mode):
+        self.last_compile = Compile(view)
         self.last_compile.compile(mode)
     def show(self):
         if not self.last_compile:
@@ -40,7 +40,9 @@ class AllCompile(object):
 class AllCompileCommand(sublime_plugin.TextCommand):
 
     def run(self, edit, mode='compile'):
-        getac(self.view).compile(mode)
+        log('src', src_type(self.view))
+
+        getac(self.view).compile(self.view, mode)
 
 class AllCompileShowPanelCommand(sublime_plugin.TextCommand):
 
@@ -53,5 +55,9 @@ class AllCompileKillCommand(sublime_plugin.TextCommand):
 
 class AllCompileCommandListCommand(sublime_plugin.TextCommand):
     def run(self, edit):
-        ModePanel(self.view).show(lambda mode: getac(self.view).compile(mode))
+        ModePanel(self.view).show(lambda mode: getac(self.view).compile(self.view, mode))
 
+
+class AllCompileTestCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        self.view.window().run_command('toggle_comment', {'panel':'allcompile_output.%d' % self.view.window().id()})

@@ -1,4 +1,3 @@
-import sublime
 from .settings import Settings
 
 class ModePanel(object):
@@ -8,5 +7,5 @@ class ModePanel(object):
         self.settings = Settings
 
     def show(self, func):
-        keys = Settings().getMode(self.view)
+        keys = Settings().get_mode(self.view)
         self.window.show_quick_panel(keys, lambda x: func(keys[x]))

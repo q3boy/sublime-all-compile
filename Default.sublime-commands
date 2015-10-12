@@ -21,4 +21,8 @@
       "caption": "AllCompile: Commands List",
       "command": "all_compile_command_list"
     },
+    {
+      "caption": "AllCompile: test",
+      "command": "all_compile_test"
+    },
 ]

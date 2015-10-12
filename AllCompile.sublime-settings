@@ -4,7 +4,7 @@
   "compilers" : {
     "CoffeeScript": {
       "extname" : ["coffee"],
-      "source" : ["source.coffee"],
+      "source" : ["^source\\.coffee\\W"],
       "syntax" : "Packages/JavaScript/JavaScript.tmLanguage",
       "cmd" : {
         "compile" : {
@@ -21,9 +21,27 @@
         }
       },
     },
-    "Jade" : {
-
+    "JSON" : {
+      "extname" : ["json"],
+      "source" : ["^source\\.json\\W"],
+      "syntax" : "Packages/JavaScript/JSON.tmLanguage",
+      "cmd" : {
+        "compile" : {
+          "stdio" : "/usr/bin/env coffee -e \"txt = ''\nprocess.stdin.on 'data', (chunk)->\n  txt += chunk\n.on 'end', ->\n  console.log JSON.stringify JSON.parse(txt), null, 2\n\""
+        }
+      },
     },
+    "Jade" : {
+      "extname" : ["jade"],
+      "source" : ["^source\\.jade\\W"],
+      "syntax" : "Packages/Jade/Syntaxes/Jade.tmLanguage",
+      "cmd" : {
+        "compile" : {
+          "file" : "/usr/bin/env jade -P -p ${ori_file} < ${file}",
+          "stdio" : "/usr/bin/env jade -P -p ${ori_file}"
+        }
+      },
+    }
     // "Stylus" : {
 
     // },
