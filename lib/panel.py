@@ -7,6 +7,8 @@ class OutputPanel(object):
     def __init__(self, window, name):
         self.name = "%s.%d" % (name, window.id())
         self._window = window
+        self.use_buffer = False
+        self.buffer = ''
         log('create panel', self.name)
         self._panel = self._get_or_create_panel(window, self.name)
 
@@ -21,9 +23,13 @@ class OutputPanel(object):
         self._panel.set_read_only(False)
 
     def write(self, text):
+        if self.use_buffer:
+            self.buffer += text
+            return
         self.unlock()
-        self._panel.run_command('append', {'characters': text})
+        self._panel.run_command('append', {'characters': self.buffer + text})
         self.lock()
+        self.buffer = ''
 
     def display(self, text):
         self.show()
@@ -31,6 +37,9 @@ class OutputPanel(object):
 
     def set_syntax_file(self, syntax_file):
         self._panel.set_syntax_file(syntax_file)
+
+    def clean(self):
+        self._window.create_output_panel(self.name)
 
     def _get_or_create_panel(self, window, name):
         try:

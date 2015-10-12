@@ -4,7 +4,7 @@ import os
 
 from operator import concat
 
-DEBUG = True
+DEBUG = False
 
 def log(*args):
     if DEBUG:

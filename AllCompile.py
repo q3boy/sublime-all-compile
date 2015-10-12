@@ -25,6 +25,21 @@ class AllCompile(object):
         self.last_compile = None
 
     def compile(self, view, mode):
+        last = self.last_compile
+        if last and last.running:
+            last.use_buffer = True
+
+            if sublime.ok_cancel_dialog('Another task is still running.', 'Kill & Run'):
+                last.kill()
+                last.buffer = ''
+                last.use_buffer = False
+                def tmp():
+                    self.last_compile = Compile(view)
+                    self.last_compile.compile(mode)
+                sublime.set_timeout(tmp, 100)
+            last.write('')
+            last.use_buffer = False
+            return
         self.last_compile = Compile(view)
         self.last_compile.compile(mode)
     def show(self):
@@ -56,8 +71,3 @@ class AllCompileKillCommand(sublime_plugin.TextCommand):
 class AllCompileCommandListCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         ModePanel(self.view).show(lambda mode: getac(self.view).compile(self.view, mode))
-
-
-class AllCompileTestCommand(sublime_plugin.TextCommand):
-    def run(self, edit):
-        self.view.window().run_command('toggle_comment', {'panel':'allcompile_output.%d' % self.view.window().id()})

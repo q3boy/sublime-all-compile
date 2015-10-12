@@ -1,12 +1,12 @@
 import signal
+import sublime
 import subprocess
 import os
 import re
-import asyncore
 
 from threading import Thread
 from contextlib import contextmanager
-from .util import log
+from .util import log, defer
 
 
 
@@ -64,6 +64,7 @@ class Process(object):
         self.failed = False
         self.env = os.environ.copy()
         self.process = None
+        self.rcode = 0
         if path:
             self.env['PATH'] = path
 
@@ -90,6 +91,9 @@ class Process(object):
         self.process.wait()
         self.terminate()
         log('returncode', self.returncode())
+        self.rcode = self.returncode()
+        sublime.set_timeout(lambda: func('\n--------------------\n%s %s\n' % (self.mode_name, "done" if self.rcode == 0 else "FAIL")), 100)
+
 
     def pipe(self, func):
         thread = Thread(target=lambda: self._pipe_stream(self.process.stdout, func))
@@ -99,7 +103,7 @@ class Process(object):
         while True:
             line = stream.readline()
             if not line:
-                func('\n--------------------\n%s done' % self.mode_name)
+
                 break
             line = line.rstrip()
             output_line = line.decode('utf-8')
@@ -122,8 +126,12 @@ class Process(object):
     def kill(self):
         pid = self.process.pid
         log('kill', pid)
-        os.kill(pid, signal.SIGTERM)
-        ProcessCache.remove(self)
+        try:
+            os.kill(pid, signal.SIGTERM)
+        except Exception:
+            pass
+        finally:
+            ProcessCache.remove(self)
 
 
 

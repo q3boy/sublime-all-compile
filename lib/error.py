@@ -8,9 +8,7 @@ class ACError(Exception):
         self.msg = msg
 
     def __str__(self):
-        output = """
-AllCompile Error: %s
-====================================""" % self.code
+        output = """AllCompile Error: %s\n====================================""" % self.code
 
         if self.msg != "":
             output += """

@@ -21,9 +21,9 @@ class Compile(OutputPanel):
         super(Compile, self).__init__(view.window(), self.PANEL_NAME)
 
     def error(self, error):
+        self.show()
         self.set_syntax_file('Packages/Markdown/Markdown.tmLanguage')
         self.write(str(error))
-        self.show()
 
     def kill(self):
         self.last_process.kill()
@@ -32,7 +32,13 @@ class Compile(OutputPanel):
                 os.unlink(self.tmpfile.name)
             except Exception:
                 pass
-
+    def final(self, tmpfile):
+        if tmpfile:
+            log('delete tmpfile', tmpfile.name)
+            os.unlink(tmpfile.name)
+            self.tmpfile = None
+        log("all done")
+        self.running = False
 
     def compile(self, mode):
         self.running = True
@@ -40,8 +46,9 @@ class Compile(OutputPanel):
         try:
             syntax, cmd, stdio, path, working_dir, tmpfile, region = \
                 Settings().get(self.view, mode, self.region)
-        except ACError as error:
+        except Exception as error:
             self.error(error)
+            self.final(None)
             return
         codes = self.editor.get_text() if region else self.editor.get_all_text()
         # show panel
@@ -66,16 +73,10 @@ class Compile(OutputPanel):
 
                 else:
                     self.last_process.communicate(func=self.write)
-            except Exception:
-                raise Exception
+            except Exception as error:
+                self.error(error)
             finally:
-                # delete tmpfile
-                if tmpfile:
-                    log('delete tmpfile', tmpfile.name)
-                    os.unlink(tmpfile.name)
-                    self.tmpfile = None
-                # sublime.status_message('[ AllCompile Done ]')
-                log("all done")
+                self.final(tmpfile)
         # start thread
         Thread(target=func).start()
         return self
