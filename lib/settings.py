@@ -130,7 +130,9 @@ class  Settings(object):
         region = False if cmd.get('no_region') else region
 
         # use default syntax
-        syntax = settings.get('syntax') or self.settings.get('syntax')
+        syntax = cmd.get('syntax') or settings.get('syntax')
+        syntax = syntax or self.settings.get('syntax')
+
         # get path
         path = getpath(settings.get('path')) if settings.get('path') else getpath()
 

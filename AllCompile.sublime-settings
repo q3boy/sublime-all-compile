@@ -8,18 +8,19 @@
       "syntax" : "Packages/JavaScript/JavaScript.tmLanguage",
       "cmd" : {
         "compile" : {
-          "file" : "/usr/bin/env coffee -pb ${file}",
+          "file" : "/usr/bin/env coffee -pb '${file}'",
           "stdio" : "/usr/bin/env coffee -pbs"
         },
         "execute" : {
-          "file" : "/usr/bin/env coffee ${file}",
+          "file" : "/usr/bin/env coffee '${file}'",
           "stdio" : "/usr/bin/env coffee -s"
         },
         "mocha" : {
-          "file" : "/usr/bin/env mocha --compilers=coffee:coffee-script/register --reporter=dot --growl --no-colors ${file}",
+          "file" : "/usr/bin/env mocha --compilers=coffee:coffee-script/register --reporter=spec --growl --no-colors '${file}'",
           "no_region" : true
+
         }
-      },
+      }
     },
     "JSON" : {
       "extname" : ["json"],
@@ -28,28 +29,54 @@
       "cmd" : {
         "compile" : {
           "stdio" : "/usr/bin/env coffee -e \"txt = ''\nprocess.stdin.on 'data', (chunk)->\n  txt += chunk\n.on 'end', ->\n  console.log JSON.stringify JSON.parse(txt), null, 2\n\""
+        },
+        "execute" : {
+          "file" : "/usr/bin/env prettyjson '${file}'",
+          "stdio" : "/usr/bin/env prettyjson"
         }
-      },
+      }
     },
     "Jade" : {
       "extname" : ["jade"],
       "source" : ["^source\\.jade\\W"],
-      "syntax" : "Packages/Jade/Syntaxes/Jade.tmLanguage",
+      "syntax" : "Packages/HTML/HTML.tmLanguage",
       "cmd" : {
         "compile" : {
-          "file" : "/usr/bin/env jade -P -p ${ori_file} < ${file}",
-          "stdio" : "/usr/bin/env jade -P -p ${ori_file}"
+          "file" : "/usr/bin/env jade -P -p '${ori_file}' < '${file}'",
+          "stdio" : "/usr/bin/env jade -P -p '${ori_file}'"
         }
-      },
+      }
+    },
+    "Python" : {
+      "extname" : ["py"],
+      "source" : ["^source\\.python\\W"],
+      "cmd" : {
+        "compile" : {
+          "file" : "/usr/bin/env python '${file}'",
+          "stdio" : "/usr/bin/env python -"
+        }
+      }
+    },
+    "JavaScript" : {
+      "extname" : ["js"],
+      "source" : ["^source\\.js\\W"],
+      "cmd" : {
+        "compile" : {
+          "file" : "/usr/bin/env node '${file}'",
+          "stdio" : "/usr/bin/env node"
+        }
+      }
+    },
+    "Syulus" : {
+      "extname" : ["styl", "stylus"],
+      "source" : ["^source\\.stylus\\W"],
+      "syntax" : "Packages/CSS/CSS.tmLanguage",
+      "cmd" : {
+        "compile" : {
+          "file" : "/usr/bin/env stylus -I '${folder}' -p '${file}'",
+          "stdio" : "/usr/bin/env stylus -p"
+        }
+      }
     }
-    // "Stylus" : {
-
-    // },
-    // "JavaScript" : {
-
-    // },
-    // "Yaml" : {
-
-    // }
   }
 }

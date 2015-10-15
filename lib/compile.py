@@ -1,4 +1,5 @@
 import os
+
 from .panel import Editor, OutputPanel
 from .execute import Process
 from .settings import Settings
@@ -51,8 +52,10 @@ class Compile(OutputPanel):
             self.final(None)
             return
         codes = self.editor.get_text() if region else self.editor.get_all_text()
-        # show panel
+        # syntax
         self.set_syntax_file(syntax)
+        log('set syntax', syntax)
+        # show panel
         self.show()
         codes = codes.encode()
         self.tmpfile = tmpfile
