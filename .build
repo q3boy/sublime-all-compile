@@ -10,6 +10,7 @@
 		"lib/execute.py",
 		"lib/error.py",
 		"lib/compile.py",
+		"__init__.py",
 		"AllCompile.py"
 	]
 }
