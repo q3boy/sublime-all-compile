@@ -45,7 +45,7 @@ class Compile(object):
                 os.unlink(self.tmpfile.name)
             except Exception:
                 pass
-    def final(self, tmpfile):
+    def final(self, tmpfile=None):
         if tmpfile:
             log('delete tmpfile', tmpfile.name)
             os.unlink(tmpfile.name)
@@ -77,7 +77,7 @@ class Compile(object):
 
         # get settings
         try:
-            settings, region, tmpfile = Settings().get(view, mode, region)
+            settings, tmpfile, region = Settings().get(view, mode, region)
 
             # syntax, cmd, stdio, path, working_dir, tmpfile, region, ftype = \
                 # Settings().get(self.view, mode, region)
@@ -85,6 +85,7 @@ class Compile(object):
             self.error(error)
             self.final(tmpfile)
             return
+        log('tmp2222',tmpfile)
         ansi = settings.get('ansi')
 
         self.ansi = ansi
@@ -106,7 +107,8 @@ class Compile(object):
         codes = codes.encode()
         self.tmpfile = tmpfile
         # write tmpfile
-        if tmpfile:
+        log('tmp',tmpfile)
+        if tmpfile and tmpfile.name:
             log('write tmpfile', tmpfile.name)
             tmpfile.write(codes)
             tmpfile.close()
