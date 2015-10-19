@@ -19,17 +19,20 @@ class Compile(object):
         self.panel = None
         # self.panel = OutputPanel(view.window(), self.PANEL_NAME)
         # self.panel = OutputTab(view.window())
+        self.output = None
 
 
     def write(self, text=None, final=False, rcode=0, mode=None):
         if final:
-            self.panel.write('\n--------------------\n%s %s\n' % (mode, "done" if rcode == 0 else "FAIL"))
+            self.output.write('\n--------------------\n%s %s\n' % (mode, "done" if rcode == 0 else "FAIL"))
         else:
-            self.panel.write(text)
+            self.output.write(text)
 
     def error(self, error):
-        panel = self.panel
-        panel.show()
+        panel = self.output
+        if not panel.show():
+            self.final(self.tmpfile)
+            return
         panel.set_syntax_file('Packages/Markdown/Markdown.tmLanguage')
         panel.write(str(error))
 
@@ -54,15 +57,15 @@ class Compile(object):
             self.panel.clean()
         if self.tab:
             self.tab.clean()
-    def get_panel(self, window, use_tab=False):
 
-        if use_tab:
-            panel = self.tab or OutputTab(window)
-            self.tab = panel
+    def get_panel(self, window, tab=False):
+        if tab:
+            self.output = self.tab or OutputTab(window)
+            self.tab = self.output
         else:
-            panel = self.panel or OutputPanel(window, self.PANEL_NAME)
-            self.panel = panel
-        return panel
+            self.output = self.panel or OutputPanel(window, self.PANEL_NAME)
+            self.panel = self.output
+        return self.output
 
     def compile(self, view, mode):
         self.running = True
@@ -78,13 +81,15 @@ class Compile(object):
                 # Settings().get(self.view, mode, region)
         except Exception as error:
             self.error(error)
-            self.final(None)
+            self.final(tmpfile)
             return
         codes = editor.get_text() if region else editor.get_all_text()
 
-        panel = self.get_panel(view.window())
+        panel = self.get_panel(view.window(), tab=True)
         # show panel
-        panel.show()
+        if not panel.show():
+            self.final(tmpfile)
+            return
         panel.set_name(mode, settings.get('type'))
         panel.clean()
         # syntax

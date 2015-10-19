@@ -15,12 +15,16 @@ class OutputTab(object):
         tab = self.view
         win = self.window
         prev = win.active_view()
+        log('prev tab', prev.id(), prev.buffer_id())
+        if tab:
+            log('curr tab', tab.id(), tab.buffer_id())
         if tab and tab.buffer_id() > 0 and tab.id() == prev.id():
             log('skip when output tab actived')
-            return
+            return False
         tab = self.create_tab()
         win.set_view_index(tab, self.group, 0)
         win.focus_view(prev)
+        return True
 
     def clean(self):
         self.view.run_command('all_compile_tab_clean')

@@ -133,8 +133,8 @@ class  Settings(object):
         syntax = cmd.get('syntax') or settings.get('syntax')
         syntax = syntax or self.settings.get('syntax')
 
-
-        tab = cmd.get('tab') or settings.get('tab')
+        # use tab mode
+        tab = True if cmd.get('tab') or settings.get('tab') else False
 
         # get path
         path = getpath(settings.get('path')) if settings.get('path') else getpath()
