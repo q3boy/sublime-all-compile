@@ -133,6 +133,9 @@ class  Settings(object):
         syntax = cmd.get('syntax') or settings.get('syntax')
         syntax = syntax or self.settings.get('syntax')
 
+
+        tab = cmd.get('tab') or settings.get('tab')
+
         # get path
         path = getpath(settings.get('path')) if settings.get('path') else getpath()
 
@@ -148,4 +151,5 @@ class  Settings(object):
         log('cmd expend variables', cmd)
 
 
-        return syntax, cmd, stdio, path, working_dir, tmpfile, region
+        return {"syntax": syntax, "cmd": cmd, "stdio": stdio, "path": path, \
+            "working_dir": working_dir, "type": name, "tab" : tab}, tmpfile, region

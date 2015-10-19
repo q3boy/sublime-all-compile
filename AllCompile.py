@@ -20,44 +20,28 @@ def getac(view):
     return ac_inst
 
 
-class AllCompile(object):
-    def __init__(self):
-        self.last_compile = None
+class AllCompile(Compile):
 
-    def compile(self, view, mode):
-        last = self.last_compile
-        if last and last.running:
-            last.use_buffer = True
-
+    def run_compile(self, view, mode):
+        if self.running:
             if sublime.ok_cancel_dialog('Another task is still running.', 'Kill & Run'):
-                last.kill()
-                last.buffer = ''
-                last.use_buffer = False
+                self.kill()
+                self.clean_panel()
                 def tmp():
-                    self.last_compile = Compile(view)
-                    self.last_compile.compile(mode)
-                sublime.set_timeout(tmp, 100)
-            last.write('')
-            last.use_buffer = False
+                    self.clean_panel()
+                    self.compile(view, mode)
+                sublime.set_timeout(tmp, 300)
             return
-        self.last_compile = Compile(view)
-        self.last_compile.compile(mode)
-    def show(self):
-        if not self.last_compile:
-            return
-        self.last_compile.show()
-    def kill(self):
-        if not self.last_compile:
-            return
-        self.last_compile.kill()
+        self.compile(view, mode)
 
+    def show(self):
+        self.panel.show()
 
 class AllCompileCommand(sublime_plugin.TextCommand):
 
     def run(self, edit, mode='compile'):
         log('src', src_type(self.view))
-
-        getac(self.view).compile(self.view, mode)
+        getac(self.view).run_compile(self.view, mode)
 
 class AllCompileShowPanelCommand(sublime_plugin.TextCommand):
 
@@ -68,6 +52,28 @@ class AllCompileKillCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         getac(self.view).kill()
 
+class AllCompileTestCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        self.view.set_name('*AC* test ccc')
+        self.view.erase(edit, sublime.Region(0, self.view.size()))
+
 class AllCompileCommandListCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         ModePanel(self.view).show(lambda mode: getac(self.view).compile(self.view, mode))
+
+class AllCompileTabCleanCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        self.view.set_read_only(False)
+        self.view.erase(edit, sublime.Region(0, self.view.size()))
+        self.view.set_read_only(True)
+
+class AllCompileTabAppendCommand(sublime_plugin.TextCommand):
+    def run(self, edit, text):
+        self.view.set_read_only(False)
+        self.view.insert(edit, self.view.size(), text)
+        self.view.set_read_only(True)
+
+class AllCompileTabFocusCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        self.view.window().focus_view(self.view)
+

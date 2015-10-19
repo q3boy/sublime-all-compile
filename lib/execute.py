@@ -90,9 +90,8 @@ class Process(object):
                 pass
         self.process.wait()
         self.terminate()
-        log('returncode', self.returncode())
+        # log('returncode', self.returncode())
         self.rcode = self.returncode()
-        sublime.set_timeout(lambda: func('\n--------------------\n%s %s\n' % (self.mode_name, "done" if self.rcode == 0 else "FAIL")), 100)
 
 
     def pipe(self, func):
@@ -103,7 +102,8 @@ class Process(object):
         while True:
             line = stream.readline()
             if not line:
-
+                sublime.set_timeout(lambda: func(final=True, rcode=self.rcode, mode=self.mode_name), 100)
+                log('return code', self.rcode)
                 break
             line = line.rstrip()
             output_line = line.decode('utf-8')
