@@ -55,7 +55,7 @@ class ProcessCache(object):
 
 
 class Process(object):
-    def __init__(self, path=None, working_dir=None, mode_name=None, nonblocking=True):
+    def __init__(self, path=None, working_dir=None, mode_name=None, nonblocking=True, ansi=False):
         self.mode_name = mode_name
         self.working_dir = working_dir
         self.nonblocking = nonblocking
@@ -65,6 +65,7 @@ class Process(object):
         self.env = os.environ.copy()
         self.process = None
         self.rcode = 0
+        self.ansi = ansi
         if path:
             self.env['PATH'] = path
 
@@ -107,7 +108,8 @@ class Process(object):
                 break
             line = line.rstrip()
             output_line = line.decode('utf-8')
-            output_line = re.sub(r'\033\[(\d{1,2}m|\d\w)', '', str(output_line))
+            if not self.ansi:
+                output_line = re.sub(r'\033\[(\d{1,2}m|\d\w)', '', str(output_line))
             output_line = output_line.replace('\r', '')
             output_line += "\n"
             func(output_line)

@@ -114,7 +114,6 @@ class  Settings(object):
             raise ACCommandNotFound(name)
         return list(cmd)
 
-
     def get(self, view, mode, region):
         # get type settings
         name, settings, src, ext = self.check(view)
@@ -136,6 +135,9 @@ class  Settings(object):
         # use tab mode
         tab = True if cmd.get('tab') or settings.get('tab') else False
 
+        ansi = True if cmd.get('ansi') or settings.get('ansi') else False
+        tab = True if ansi else tab
+
         # get path
         path = getpath(settings.get('path')) if settings.get('path') else getpath()
 
@@ -152,4 +154,4 @@ class  Settings(object):
 
 
         return {"syntax": syntax, "cmd": cmd, "stdio": stdio, "path": path, \
-            "working_dir": working_dir, "type": name, "tab" : tab}, tmpfile, region
+            "working_dir": working_dir, "type": name, "tab" : tab, "ansi": ansi}, tmpfile, region

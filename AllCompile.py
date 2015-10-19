@@ -54,8 +54,38 @@ class AllCompileKillCommand(sublime_plugin.TextCommand):
 
 class AllCompileTestCommand(sublime_plugin.TextCommand):
     def run(self, edit):
-        self.view.set_name('*AC* test ccc')
-        self.view.erase(edit, sublime.Region(0, self.view.size()))
+      return
+
+class AllCompileAnsiCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        view = self.view
+        view.set_read_only(False)
+        view.settings().set("color_scheme", "Packages/AllCompile/ansi.tmTheme")
+        view.set_syntax_file('Packages/AllCompile/ansi.tmLanguage')
+        view.settings().set("draw_white_space", "none")
+
+        # removing unsupported ansi escape codes before going forward: 2m 4m 5m 7m 8m
+        ansi_unsupported_codes = view.find_all(r'(\x1b\[(0;)?(2|4|5|7|8)m)')
+        log(ansi_unsupported_codes)
+        ansi_unsupported_codes.reverse()
+        for r in ansi_unsupported_codes:
+            view.replace(edit, r, "\x1b[1m")
+
+        settings = sublime.load_settings("ansi.sublime-settings")
+        for bg in settings.get("ANSI_BG", []):
+            for fg in settings.get("ANSI_FG", []):
+                regex = r'({0}{1}(?!\x1b))(.+?)(?=\x1b)|({1}{0}(?!\x1b))(.+?)(?=\x1b)'.format(fg['code'], bg['code'])
+                ansi_scope = "{0}{1}".format(fg['scope'], bg['scope'])
+                ansi_regions = view.find_all(regex)
+                log(ansi_scope, '\n', regex, '\n', ansi_regions, '---------------')
+                view.add_regions(ansi_scope, ansi_regions, ansi_scope, '', sublime.DRAW_NO_OUTLINE)
+
+        # removing the rest of  ansi escape codes
+        ansi_codes = view.find_all(r'(\x1b\[[\d;]*m){1,}')
+        ansi_codes.reverse()
+        for r in ansi_codes:
+            view.erase(edit, r)
+        view.set_read_only(True)
 
 class AllCompileCommandListCommand(sublime_plugin.TextCommand):
     def run(self, edit):

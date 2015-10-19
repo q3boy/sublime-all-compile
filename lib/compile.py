@@ -17,14 +17,16 @@ class Compile(object):
         self.running = False
         self.tab = None
         self.panel = None
-        # self.panel = OutputPanel(view.window(), self.PANEL_NAME)
-        # self.panel = OutputTab(view.window())
         self.output = None
+        self.ansi = False
 
 
     def write(self, text=None, final=False, rcode=0, mode=None):
         if final:
             self.output.write('\n--------------------\n%s %s\n' % (mode, "done" if rcode == 0 else "FAIL"))
+            if self.ansi:
+                self.output.ansi()
+                self.ansi = False
         else:
             self.output.write(text)
 
@@ -83,9 +85,13 @@ class Compile(object):
             self.error(error)
             self.final(tmpfile)
             return
+        ansi = settings.get('ansi')
+
+        self.ansi = ansi
+
         codes = editor.get_text() if region else editor.get_all_text()
 
-        panel = self.get_panel(view.window(), tab=True)
+        panel = self.get_panel(view.window(), tab=settings.get('tab'))
         # show panel
         if not panel.show():
             self.final(tmpfile)
@@ -93,8 +99,9 @@ class Compile(object):
         panel.set_name(mode, settings.get('type'))
         panel.clean()
         # syntax
-        panel.set_syntax_file(settings.get('syntax'))
-        log('set syntax', settings.get('syntax'))
+        if not ansi:
+            panel.set_syntax_file(settings.get('syntax'))
+            log('set syntax', settings.get('syntax'))
 
         codes = codes.encode()
         self.tmpfile = tmpfile
@@ -108,8 +115,8 @@ class Compile(object):
             log("new thread", settings.get('cmd'))
             try:
                 # run sub process
-                self.last_process = Process( \
-                    working_dir=settings.get('working_dir'), path=settings.get('path'), mode_name=mode)
+                self.last_process = Process(working_dir=settings.get('working_dir'), \
+                    path=settings.get('path'), mode_name=mode, ansi=ansi)
                 self.last_process.run(settings.get('cmd'))
                 if settings.get('stdio'):
                     self.last_process.communicate(inputs=codes, func=self.write)

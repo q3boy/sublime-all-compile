@@ -25,6 +25,8 @@ class OutputTab(object):
         win.set_view_index(tab, self.group, 0)
         win.focus_view(prev)
         return True
+    def ansi(self):
+        self.view.run_command('all_compile_ansi')
 
     def clean(self):
         self.view.run_command('all_compile_tab_clean')
@@ -81,6 +83,7 @@ class OutputPanel(object):
     def show(self):
         log('show panel', self.name)
         self.window.run_command('show_panel', {'panel': "output.%s" % self.name})
+        return True
 
     def lock(self):
         self.panel.set_read_only(True)
@@ -100,8 +103,9 @@ class OutputPanel(object):
         self.panel.set_syntax_file(syntax_file)
 
     def clean(self):
-        self.buf.clean()
-        self.panel = self.window.create_output_panel(self.name)
+        # self.buf.clean()
+        # self.panel = self.window.create_output_panel(self.name)
+        return
 
     def set_name(self, mode, type):
         return

@@ -16,7 +16,8 @@
           "stdio" : "/usr/bin/env coffee -s"
         },
         "mocha" : {
-          "file" : "/usr/bin/env mocha --compilers=coffee:coffee-script/register --reporter=spec --growl --no-colors '${file}'",
+          "file" : "/usr/bin/env mocha --compilers=coffee:coffee-script/register --reporter=spec --colors --growl '${file}'",
+          "ansi" : true,
           "no_region" : true
 
         }
@@ -75,6 +76,17 @@
         "compile" : {
           "file" : "/usr/bin/env stylus -I '${folder}' -p '${file}'",
           "stdio" : "/usr/bin/env stylus -p"
+        }
+      }
+    },
+    "XML" : {
+      "extname" : ["xml"],
+      "source" : ["^text\\.xml\\W"],
+      "syntax" : "Packages/XML/XML.tmLanguage",
+      "cmd" : {
+        "compile" : {
+          "file" : "/usr/bin/env xmllint --format '${file}'",
+          "stdio" : "/usr/bin/env xmllint --format -"
         }
       }
     }
