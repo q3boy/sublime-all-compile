@@ -103,8 +103,8 @@ class OutputPanel(object):
         self.panel.set_syntax_file(syntax_file)
 
     def clean(self):
-        # self.buf.clean()
-        # self.panel = self.window.create_output_panel(self.name)
+        self.buf.clean()
+        self.panel = self.window.create_output_panel(self.name)
         return
 
     def set_name(self, mode, type):

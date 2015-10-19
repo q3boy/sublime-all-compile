@@ -1,5 +1,5 @@
 {
-	"automatic_order": true,
+	"automatic_order": false,
 	"iterations": 1,
 	"mods_load_order":
 	[
