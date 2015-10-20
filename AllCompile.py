@@ -63,6 +63,7 @@ class AllCompileAnsiCommand(sublime_plugin.TextCommand):
         view.settings().set("color_scheme", "Packages/AllCompile/ansi.tmTheme")
         view.set_syntax_file('Packages/AllCompile/ansi.tmLanguage')
         view.settings().set("draw_white_space", "none")
+        view.settings().set("line_numbers", False)
 
         # removing unsupported ansi escape codes before going forward: 2m 4m 5m 7m 8m
         ansi_unsupported_codes = view.find_all(r'(\x1b\[(0;)?(2|4|5|7|8)m)')
