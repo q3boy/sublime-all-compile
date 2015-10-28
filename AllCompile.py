@@ -35,13 +35,18 @@ class AllCompile(Compile):
         self.compile(view, mode)
 
     def show(self):
-        self.panel.show()
+        try:
+            self.panel.show()
+        except Exception:
+            pass
 
 class AllCompileCommand(sublime_plugin.TextCommand):
 
     def run(self, edit, mode='compile'):
-        log('src', src_type(self.view))
-        getac(self.view).run_compile(self.view, mode)
+        ac = getac(self.view)
+        if mode == '__LAST_COMMAND__' and ac.last_mode:
+            mode = ac.last_mode
+        ac.run_compile(self.view, mode)
 
 class AllCompileShowPanelCommand(sublime_plugin.TextCommand):
 
@@ -51,10 +56,6 @@ class AllCompileShowPanelCommand(sublime_plugin.TextCommand):
 class AllCompileKillCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         getac(self.view).kill()
-
-class AllCompileTestCommand(sublime_plugin.TextCommand):
-    def run(self, edit):
-      return
 
 class AllCompileAnsiCommand(sublime_plugin.TextCommand):
     def run(self, edit):

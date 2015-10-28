@@ -13,6 +13,7 @@ class Compile(object):
 
     def __init__(self):
         self.tmpfile = None
+        self.last_mode = None
         self.last_process = None
         self.running = False
         self.tab = None
@@ -90,6 +91,7 @@ class Compile(object):
 
     def compile(self, view, mode):
         self.running = True
+        self.last_mode = mode
 
         editor = Editor(view)
         region = editor.has_selected_text()

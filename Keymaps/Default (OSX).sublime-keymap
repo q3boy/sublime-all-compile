@@ -1,4 +1,6 @@
 [
+
     {"keys": ["super+shift+c"], "command": "all_compile"},
+    {"keys": ["super+shift+a"], "command": "all_compile", "args": { "mode" : "__LAST_COMMAND__"}},
     {"keys": ["super+shift+x"], "command": "all_compile", "args": { "mode" : "execute"}}
 ]

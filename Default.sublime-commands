@@ -18,11 +18,12 @@
       "command": "all_compile_kill"
     },
     {
-      "caption": "AllCompile: Commands List",
-      "command": "all_compile_command_list"
+      "caption": "AllCompile: Last Command",
+      "command": "all_compile",
+      "args": { "mode" : "__LAST_COMMAND__"}
     },
     {
-      "caption": "AllCompile: test",
-      "command": "all_compile_test"
-    },
+      "caption": "AllCompile: Commands List",
+      "command": "all_compile_command_list"
+    }
 ]
