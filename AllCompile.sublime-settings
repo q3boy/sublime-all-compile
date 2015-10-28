@@ -1,10 +1,34 @@
 {
   "path" : [],
   "syntax" : "Packages/Text/Plain text.tmLanguage",
-  "compilers" : {
-    "CoffeeScript": {
+  "compilers" : [
+    {
+      "name" : "MochaCoffee",
+      "extend" : "CoffeeScript",
+      "source" : [".*source\\.coffee\\.mocha\\W"],
+      "cmd" : {
+        "mocha" : {
+          "file" : "/usr/bin/env mocha --compilers=coffee:coffee-script/register --reporter=spec --colors --growl '${file}'",
+          "ansi" : true,
+          "no_region" : true
+        }
+      }
+    },    {
+      "name" : "GulpCoffee",
+      "extend" : "CoffeeScript",
+      "source" : [".*source\\.gulpfile\\.coffee"],
+      "cmd" : {
+        "execute" : {
+          "file" : "/usr/bin/env gulp",
+          "syntax": "Packages/Gulp/syntax/GulpResults.tmLanguage",
+          "no_region" : true
+        }
+      }
+    },
+    {
+      "name" : "CoffeeScript",
       "extname" : ["coffee"],
-      "source" : ["^source\\.coffee\\W"],
+      "source" : ["source\\.coffee\\W"],
       "syntax" : "Packages/JavaScript/JavaScript.tmLanguage",
       "cmd" : {
         "compile" : {
@@ -14,18 +38,13 @@
         "execute" : {
           "file" : "/usr/bin/env coffee '${file}'",
           "stdio" : "/usr/bin/env coffee -s"
-        },
-        "mocha" : {
-          "file" : "/usr/bin/env mocha --compilers=coffee:coffee-script/register --reporter=spec --colors --growl '${file}'",
-          "ansi" : true,
-          "no_region" : true
-
         }
       }
     },
-    "JSON" : {
+    {
+      "name" : "JSON",
       "extname" : ["json"],
-      "source" : ["^source\\.json\\W"],
+      "source" : ["source\\.json\\W"],
       "syntax" : "Packages/JavaScript/JSON.tmLanguage",
       "cmd" : {
         "compile" : {
@@ -37,9 +56,10 @@
         }
       }
     },
-    "Jade" : {
+    {
+      "name" : "Jade",
       "extname" : ["jade"],
-      "source" : ["^source\\.jade\\W"],
+      "source" : ["source\\.jade\\W"],
       "syntax" : "Packages/HTML/HTML.tmLanguage",
       "cmd" : {
         "compile" : {
@@ -48,9 +68,10 @@
         }
       }
     },
-    "Python" : {
+    {
+      "name" : "Python",
       "extname" : ["py"],
-      "source" : ["^source\\.python\\W"],
+      "source" : ["source\\.python\\W"],
       "cmd" : {
         "compile" : {
           "file" : "/usr/bin/env python '${file}'",
@@ -58,9 +79,10 @@
         }
       }
     },
-    "JavaScript" : {
+    {
+      "name" : "JavaScript",
       "extname" : ["js"],
-      "source" : ["^source\\.js\\W"],
+      "source" : ["source\\.js\\W"],
       "cmd" : {
         "compile" : {
           "file" : "/usr/bin/env node '${file}'",
@@ -68,9 +90,10 @@
         }
       }
     },
-    "Syulus" : {
+    {
+      "name" : "Stylus",
       "extname" : ["styl", "stylus"],
-      "source" : ["^source\\.stylus\\W"],
+      "source" : ["source\\.stylus\\W"],
       "syntax" : "Packages/CSS/CSS.tmLanguage",
       "cmd" : {
         "compile" : {
@@ -79,9 +102,10 @@
         }
       }
     },
-    "XML" : {
+    {
+      "name" : "XML",
       "extname" : ["xml"],
-      "source" : ["^text\\.xml\\W"],
+      "source" : ["text\\.xml\\W"],
       "syntax" : "Packages/XML/XML.tmLanguage",
       "cmd" : {
         "compile" : {
@@ -90,5 +114,5 @@
         }
       }
     }
-  }
+  ]
 }

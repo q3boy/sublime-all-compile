@@ -3,8 +3,25 @@ import os
 import re
 
 from .error import ACTypeNotFound, ACCommandModeNotFound, ACCommandNotFound, ACSettingsError, ACCommandNotDefined
-from .util import log, getpath
+from .util import log, getpath, dump
 from tempfile import NamedTemporaryFile
+
+
+def extends(child, parent):
+    new = dict()
+    for key, val in parent.items():
+        cld = child.get(key)
+        if cld == None:
+            new[key] = val
+        elif isinstance(cld, dict) and isinstance(val, dict):
+            new[key] = extends(cld, val)
+        else:
+            new[key] = cld
+
+    for key, val in child.items():
+        if parent.get(key) == None:
+            new[key] = val
+    return new
 
 def src_type(view):
     log('src_type', view.scope_name(0))
@@ -29,6 +46,13 @@ def init_tmpfile(variables):
     variables['ori_file_path'] = os.path.dirname(tmpfile.name)
     return tmpfile, variables
 
+def get_by_name(name, list):
+    if not name:
+        return None
+    for item in list:
+        if name == item.get('name'):
+            return item
+    return None
 
 def get_cmd(cmd, variables, region):
     stdio = cmd.get('stdio')
@@ -71,36 +95,58 @@ def get_vars(view):
     working_dir = folder or file_path
     return working_dir, variables
 
+
 class  Settings(object):
     def __init__(self):
         self.settings = sublime.load_settings("AllCompile.sublime-settings")
         log('load settings file')
 
+
     def check(self, view):
         src = src_type(view)
         ext = ext_name(view)
-        log('settings 1', src, ext)
+        settings = None
+        name = ''
+        found = False
         compilers = self.settings.get('compilers')
-        for name, v in compilers.items():
-            srcbox = v.get('source')
-            extbox = v.get('extname')
-            log('settings 2', name, srcbox, extbox)
+        cpl_dict = dict()
+        for settings in compilers:
+            name = settings.get('name')
+            cpl_dict[name] = settings.copy()
+            del cpl_dict[name]['name']
+        for name, settings in cpl_dict.items():
+            # pass
+            while settings.get('extend') and cpl_dict.get(settings.get('extend')):
+                extend = settings.get('extend')
+                del settings['extend']
+                settings = extends(settings, cpl_dict.get(extend))
+            cpl_dict[name] = settings
+        for settings in compilers:
+            name = settings.get('name')
+            settings = cpl_dict.get(name)
+            srcbox = settings.get('source')
+            extbox = settings.get('extname')
             if not srcbox and not extbox:
-                log('skip type check', name)
-                log('settings 3', name, srcbox, extbox)
                 continue
             if src:
-                log('settings 4 src', src, srcbox)
                 for reg in srcbox:
-                    log('settings 6 reg', reg, src, re.match(src, reg))
+                    log('check source', reg, src)
                     if re.match(reg, src):
-                        return name, v, src, ext
+                        found = True
+                        log('found type by source', srcbox, src)
+                        break
             elif ext and extbox.count(ext) > 0:
-                log('settings 5 ext', ext, extbox)
-                log('found type by extname', ext)
-                return name, v, src, ext
-        log('found nothing', src, ext)
-        return None, {}, src, ext
+                found = True
+                log('found type by extname', extbox, ext)
+                break
+            if found:
+                break
+        if found == False:
+            log('found nothing', src, ext)
+            return None, {}, src, ext
+        log('found type', name)
+        dump(settings)
+        return name, settings, src, ext
 
     def get_mode(self, view):
         # get type settings
