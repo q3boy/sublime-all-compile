@@ -25,7 +25,8 @@ def extends(child, parent):
 
 def src_type(view):
     log('src_type', view.scope_name(0))
-    return view.scope_name(0)
+    return [src.strip(', \t') for src in view.scope_name(0).split(' ')]
+
 
 def ext_name(view):
     fname = view.file_name()
@@ -129,13 +130,12 @@ class  Settings(object):
             if not srcbox and not extbox:
                 continue
             if src:
-                for reg in srcbox:
-                    log('check source', reg, src)
-                    if re.match(reg, src):
+                for s in src:
+                    if srcbox.count(s) > 0:
                         found = True
                         log('found type by source', srcbox, src)
                         break
-            elif ext and extbox.count(ext) > 0:
+            if ext and extbox.count(ext) > 0:
                 found = True
                 log('found type by extname', extbox, ext)
                 break

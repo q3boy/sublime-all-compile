@@ -5,7 +5,8 @@
     {
       "name" : "MochaCoffee",
       "extend" : "CoffeeScript",
-      "source" : [".*source\\.coffee\\.mocha\\W"],
+      "extname" : [],
+      "source" : ["source.coffee.mocha"],
       "cmd" : {
         "mocha" : {
           "file" : "/usr/bin/env mocha --compilers=coffee:coffee-script/register --reporter=spec --colors --growl '${file}'",
@@ -16,7 +17,8 @@
     },    {
       "name" : "GulpCoffee",
       "extend" : "CoffeeScript",
-      "source" : [".*source\\.gulpfile\\.coffee"],
+      "extname" : [""],
+      "source" : ["source.gulpfile.coffee"],
       "cmd" : {
         "execute" : {
           "file" : "/usr/bin/env gulp",
@@ -28,7 +30,7 @@
     {
       "name" : "CoffeeScript",
       "extname" : ["coffee"],
-      "source" : ["source\\.coffee\\W"],
+      "source" : ["source.coffee"],
       "syntax" : "Packages/JavaScript/JavaScript.tmLanguage",
       "cmd" : {
         "compile" : {
@@ -44,7 +46,7 @@
     {
       "name" : "JSON",
       "extname" : ["json"],
-      "source" : ["source\\.json\\W"],
+      "source" : ["source.json"],
       "syntax" : "Packages/JavaScript/JSON.tmLanguage",
       "cmd" : {
         "compile" : {
@@ -59,7 +61,7 @@
     {
       "name" : "Jade",
       "extname" : ["jade"],
-      "source" : ["source\\.jade\\W"],
+      "source" : ["text.jade"],
       "syntax" : "Packages/HTML/HTML.tmLanguage",
       "cmd" : {
         "compile" : {
@@ -71,7 +73,7 @@
     {
       "name" : "Python",
       "extname" : ["py"],
-      "source" : ["source\\.python\\W"],
+      "source" : ["source.python"],
       "cmd" : {
         "compile" : {
           "file" : "/usr/bin/env python '${file}'",
@@ -82,7 +84,7 @@
     {
       "name" : "JavaScript",
       "extname" : ["js"],
-      "source" : ["source\\.js\\W"],
+      "source" : ["source.js"],
       "cmd" : {
         "compile" : {
           "file" : "/usr/bin/env node '${file}'",
@@ -93,7 +95,7 @@
     {
       "name" : "Stylus",
       "extname" : ["styl", "stylus"],
-      "source" : ["source\\.stylus\\W"],
+      "source" : ["source.stylus"],
       "syntax" : "Packages/CSS/CSS.tmLanguage",
       "cmd" : {
         "compile" : {
@@ -105,7 +107,7 @@
     {
       "name" : "XML",
       "extname" : ["xml"],
-      "source" : ["text\\.xml\\W"],
+      "source" : ["text.xml"],
       "syntax" : "Packages/XML/XML.tmLanguage",
       "cmd" : {
         "compile" : {
