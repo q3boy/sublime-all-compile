@@ -1,0 +1,72 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+---
+name: Mocha Results
+scopeName: source.mocha_spec_result
+uuid: fd42fc3d-a681-4575-baee-eea04f76b772
+
+patterns:
+- begin: "--------------------"
+  end: ^mocha (done|FAIL)$
+  name: comment
+- match: ^(ok \d+) (.+)$
+  captures:
+    '1': {name: string}
+    '2': {name: support.function}
+
+- match: ^(not ok \d+) (.+)$
+  captures:
+    '1': {name: invalid}
+    '2': {name: support.function}
+
+- match: ^(#.*)$
+  captures:
+    '1': {name: comment}
+
+- match: ^(\d+\.+\d+)$
+  captures:
+    '1': {name: comment}
+
+- match: ^    at (.+?) \((.+?):(\d+):(\d+)\)\s*$
+  captures:
+    '1': {name: support.function}
+    '2': {name: string}
+    '3': {name: constant.numeric}
+    '4': {name: constant.numeric}
+
+    # at Assertion.assert (node_modules/expect.js/index.js:96:13)
+
+
+#   zip
+#     ✓ empty file
+#     ✓ dir & text files (70ms)
+
+
+#   2 passing (106ms)
+
+
+# --------------------
+# mocha done
+
+
+#   zip
+#     1) empty file
+#     ✓ dir & text files (92ms)
+
+
+#   1 passing (184ms)
+#   1 failing
+
+#   1) zip empty file:
+#      Uncaught Error: expected 0 to equal 1
+#     at Assertion.assert (node_modules/expect.js/index.js:96:13)
+#     at Assertion.be.Assertion.equal (node_modules/expect.js/index.js:216:10)
+#     at Assertion.(anonymous function) [as be] (node_modules/expect.js/index.js:69:24)
+#     at Parse.<anonymous> (spec/spec-zip.coffee:25:19)
+#     at Parse._flush (node_modules/unzip/lib/parse.js:303:8)
+
+
+
+
+
+# --------------------
+# mocha FAIL

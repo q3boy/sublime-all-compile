@@ -9,12 +9,27 @@
       "source" : ["source.coffee.mocha"],
       "cmd" : {
         "mocha" : {
-          "file" : "/usr/bin/env mocha --compilers=coffee:coffee-script/register --reporter=spec --colors --growl '${file}'",
-          "ansi" : true,
+          "file" : "/usr/bin/env mocha --compilers=coffee:coffee-script/register --reporter=tap --no-colors --growl '${file}'",
+          // "ansi" : true,
+          "syntax": "Packages/AllCompile/mocha-tap.tmLanguage",
           "no_region" : true
         }
       }
-    },    {
+    },
+    {
+      "name" : "GulpJS",
+      "extend" : "JavaScript",
+      "extname" : [""],
+      "source" : ["source.gulpfile.js"],
+      "cmd" : {
+        "execute" : {
+          "file" : "/usr/bin/env gulp",
+          "syntax": "Packages/AllCompile/gulp.tmLanguage",
+          "no_region" : true
+        }
+      }
+    },
+    {
       "name" : "GulpCoffee",
       "extend" : "CoffeeScript",
       "extname" : [""],
@@ -22,7 +37,7 @@
       "cmd" : {
         "execute" : {
           "file" : "/usr/bin/env gulp",
-          "syntax": "Packages/Gulp/syntax/GulpResults.tmLanguage",
+          "syntax": "Packages/AllCompile/gulp.tmLanguage",
           "no_region" : true
         }
       }

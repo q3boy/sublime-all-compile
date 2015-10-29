@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Mocha Results</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>begin</key>
+			<string>--------------------</string>
+			<key>end</key>
+			<string>^mocha (done|FAIL)$</string>
+			<key>name</key>
+			<string>comment</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>support.function</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^(ok \d+) (.+)$</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>invalid</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>support.function</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^(not ok \d+) (.+)$</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>comment</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^(#.*)$</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>comment</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^(\d+\.+\d+)$</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.function</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>string</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>constant.numeric</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>constant.numeric</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^    at (.+?) \((.+?):(\d+):(\d+)\)\s*$</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.mocha_spec_result</string>
+	<key>uuid</key>
+	<string>fd42fc3d-a681-4575-baee-eea04f76b772</string>
+</dict>
+</plist>
