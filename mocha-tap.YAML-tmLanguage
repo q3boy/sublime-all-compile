@@ -8,10 +8,11 @@ patterns:
 - begin: "--------------------"
   end: ^mocha (done|FAIL)$
   name: comment
-- match: ^(ok \d+) (.+)$
+- match: ^(ok \d+) (.+?)(\# SKIP.+?)?$
   captures:
     '1': {name: string}
     '2': {name: support.function}
+    '3': {name: constant.language}
 
 - match: ^(not ok \d+) (.+)$
   captures:
@@ -32,6 +33,12 @@ patterns:
     '2': {name: string}
     '3': {name: constant.numeric}
     '4': {name: constant.numeric}
+
+- match: ^    at (.+?):(\d+):(\d+)\s*$
+  captures:
+    '1': {name: string}
+    '2': {name: constant.numeric}
+    '3': {name: constant.numeric}
 
     # at Assertion.assert (node_modules/expect.js/index.js:96:13)
 

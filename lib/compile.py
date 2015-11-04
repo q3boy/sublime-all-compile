@@ -91,7 +91,8 @@ class Compile(object):
 
     def compile(self, view, mode):
         self.running = True
-        self.last_mode = mode
+        if mode != 'compile' and mode != 'execute':
+            self.last_mode = mode
 
         editor = Editor(view)
         region = editor.has_selected_text()

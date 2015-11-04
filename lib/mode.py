@@ -11,4 +11,14 @@ class ModePanel(object):
 
     def show(self, func):
         keys = Settings().get_mode(self.view)
-        self.window.show_quick_panel(keys, lambda x: func(keys[x]) if x >= 0 else None)
+        nkeys = []
+        nkkeys = []
+        for key in keys:
+            if key != 'execute' and key != 'compile':
+                nkeys.append(key)
+                nkkeys.append(key)
+        for key in keys:
+            if key == 'execute' or key == 'compile':
+                nkeys.append("* " + key)
+                nkkeys.append(key)
+        self.window.show_quick_panel(nkeys, lambda x: func(nkkeys[x]) if x >= 0 else None)

@@ -27,9 +27,14 @@
 					<key>name</key>
 					<string>support.function</string>
 				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>constant.language</string>
+				</dict>
 			</dict>
 			<key>match</key>
-			<string>^(ok \d+) (.+)$</string>
+			<string>^(ok \d+) (.+?)(\# SKIP.+?)?$</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -98,6 +103,28 @@
 			</dict>
 			<key>match</key>
 			<string>^    at (.+?) \((.+?):(\d+):(\d+)\)\s*$</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>constant.numeric</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>constant.numeric</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^    at (.+?):(\d+):(\d+)\s*$</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

@@ -9,7 +9,7 @@
       "source" : ["source.coffee.mocha"],
       "cmd" : {
         "mocha" : {
-          "file" : "/usr/bin/env mocha --compilers=coffee:coffee-script/register --reporter=tap --no-colors --growl '${file}'",
+          "file" : "/usr/bin/env mocha --compilers=coffee:coffee-script/register --reporter=tap --no-colors --growl --timeout=3000 '${file}'",
           // "ansi" : true,
           "syntax": "Packages/AllCompile/mocha-tap.tmLanguage",
           "no_region" : true
@@ -22,7 +22,7 @@
       "extname" : [""],
       "source" : ["source.gulpfile.js"],
       "cmd" : {
-        "execute" : {
+        "gulp-default" : {
           "file" : "/usr/bin/env gulp",
           "syntax": "Packages/AllCompile/gulp.tmLanguage",
           "no_region" : true
@@ -35,7 +35,7 @@
       "extname" : [""],
       "source" : ["source.gulpfile.coffee"],
       "cmd" : {
-        "execute" : {
+        "gulp-default" : {
           "file" : "/usr/bin/env gulp",
           "syntax": "Packages/AllCompile/gulp.tmLanguage",
           "no_region" : true
