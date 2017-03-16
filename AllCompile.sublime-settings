@@ -17,6 +17,20 @@
       }
     },
     {
+      "name" : "Mocha",
+      "extend" : "JavaScript",
+      "extname" : [],
+      "source" : ["source.js"],
+      "cmd" : {
+        "mocha" : {
+          "file" : "/usr/bin/env mocha --reporter=tap --no-colors --growl --timeout=3000 '${file}'",
+          // "ansi" : true,
+          "syntax": "Packages/AllCompile/mocha-tap.tmLanguage",
+          "no_region" : true
+        }
+      }
+    },
+    {
       "name" : "GulpJS",
       "extend" : "JavaScript",
       "extname" : [""],
@@ -49,6 +63,7 @@
       "syntax" : "Packages/JavaScript/JavaScript.tmLanguage",
       "cmd" : {
         "compile" : {
+          "tab":false,
           "file" : "/usr/bin/env coffee -pb '${file}'",
           "stdio" : "/usr/bin/env coffee -pbs"
         },
@@ -80,8 +95,8 @@
       "syntax" : "Packages/HTML/HTML.tmLanguage",
       "cmd" : {
         "compile" : {
-          "file" : "/usr/bin/env jade -P -p '${ori_file}' < '${file}'",
-          "stdio" : "/usr/bin/env jade -P -p '${ori_file}'"
+          "file" : "/usr/bin/env pug -P -p '${ori_file}' < '${file}'",
+          "stdio" : "/usr/bin/env pug -P -p '${ori_file}'"
         }
       }
     },
@@ -97,11 +112,41 @@
       }
     },
     {
+      "name" : "Babel",
+      // "scheck" : ["Packages/Babel/JavaScript (Babel).sublime-syntax"],
+      "syntax" : "Packages/JavaScript/JavaScript.tmLanguage",
+      "cmd" : {
+        "compile" : {
+          "file" : "/usr/bin/env babel --presets react,es2015 '${file}'",
+          "stdio" : "/usr/bin/env babel --presets react,es2015 -f '${file}'"
+        },
+        "execute" : {
+          "file" : "/usr/bin/env babel-node --presets react,es2015 '${file}' 2>&1",
+          "stdio" : "/usr/bin/env babel-node --presets react,es2015 -e 2>&1"
+        }
+      }
+    },
+
+    {
+      "name" : "YAML",
+      "extname" : ["yml", "yaml"],
+      "source" : ["source.yaml"],
+      "cmd" : {
+        "compile" : {
+          "file" : "/usr/bin/env js-yaml -t '${file}'",
+        }
+      }
+    },
+    {
       "name" : "JavaScript",
       "extname" : ["js"],
       "source" : ["source.js"],
       "cmd" : {
         "compile" : {
+          "file" : "/usr/bin/env node '${file}'",
+          "stdio" : "/usr/bin/env node"
+        },
+        "execute" : {
           "file" : "/usr/bin/env node '${file}'",
           "stdio" : "/usr/bin/env node"
         }

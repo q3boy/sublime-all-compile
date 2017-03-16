@@ -106,6 +106,7 @@ class  Settings(object):
     def check(self, view):
         src = src_type(view)
         ext = ext_name(view)
+        scheck = view.settings().get('syntax')
         settings = None
         name = ''
         found = False
@@ -127,33 +128,40 @@ class  Settings(object):
             settings = cpl_dict.get(name)
             srcbox = settings.get('source')
             extbox = settings.get('extname')
-            if not srcbox and not extbox:
+            scheckbox = settings.get('scheck')
+            if not srcbox and not extbox and not scheckbox:
                 continue
-            if src:
+            if scheckbox:
+                for sc in scheckbox:
+                    if scheckbox.count(scheck) > 0:
+                        found = True
+                        log('found type by syntax check', scheckbox, scheck)
+                        break
+            if src and srcbox :
                 for s in src:
                     if srcbox.count(s) > 0:
                         found = True
                         log('found type by source', srcbox, src)
                         break
-            if ext and extbox.count(ext) > 0:
+            if ext and extbox and extbox.count(ext) > 0:
                 found = True
                 log('found type by extname', extbox, ext)
                 break
             if found:
                 break
         if found == False:
-            log('found nothing', src, ext)
+            log('found nothing', src, ext, scheck)
             return None, {}, src, ext
         log('found type', name)
         dump(settings)
-        return name, settings, src, ext
+        return name, settings, src, ext, scheck
 
     def get_mode(self, view):
         # get type settings
-        name, settings, src, ext = self.check(view)
+        name, settings, src, ext, scheck = self.check(view)
         # check type
         if name == None:
-            raise ACTypeNotFound(src, ext)
+            raise ACTypeNotFound(src, ext, scheck)
         # check command
         cmd = settings.get('cmd')
         if not cmd:
@@ -162,10 +170,10 @@ class  Settings(object):
 
     def get(self, view, mode, region):
         # get type settings
-        name, settings, src, ext = self.check(view)
+        name, settings, src, ext, scheck = self.check(view)
         # check type
         if name == None:
-            raise ACTypeNotFound(src, ext)
+            raise ACTypeNotFound(src, ext, scheck)
         # check command
         cmd = settings.get('cmd').get(mode)
         if not cmd:

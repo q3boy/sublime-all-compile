@@ -24,10 +24,11 @@ Path
 
 
 class ACTypeNotFound(ACError):
-    def __init__(self, src, ext):
+    def __init__(self, src, ext, scheck):
         code = "Type not Found"
         msg = "source: %s\n" % src
         msg += "extname: %s\n" % ext
+        msg += "syntax check: %s\n" % scheck
         super().__init__(code, msg)
 
 class ACCommandNotFound(ACError):
